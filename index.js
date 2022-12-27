@@ -136,7 +136,28 @@ app.get("/movies/update", (req, res) => {
 });
 
 app.get("/movies/delete", (req, res) => {
-    res.send(`delete`);
+    res.send(`you have to enter delete/< ID > `);
+});
+
+app.get("/movies/delete/:id", (req, res) => {
+    if (isNaN(req.params.id)) {
+        res.status(404);
+        res.send({
+            status: 404,
+            error: true,
+            message: `please enter a valid id number`,
+        });
+    } else if (req.params.id < 0 || req.params.id > movies.length - 1) {
+        res.status(404);
+        res.send({
+            status: 404,
+            error: true,
+            message: `the movie ${req.params.id} does not exist`,
+        });
+    } else {
+        movies.splice(req.params.id, 1);
+        res.send(movies);
+    }
 });
 
 app.listen(PORT, () => {
