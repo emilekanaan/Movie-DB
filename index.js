@@ -132,7 +132,53 @@ app.get("/movies/read/id/:id", (req, res) => {
 });
 
 app.get("/movies/update", (req, res) => {
-    res.send(`update`);
+    res.send(`you have to enter update/< ID >?title=< NEW_TITLE > `);
+});
+
+app.get("/movies/update/:id", (req, res) => {
+    if (isNaN(req.params.id)) {
+        res.status(404);
+        res.send({
+            status: 404,
+            error: true,
+            message: `please enter a valid id number`,
+        });
+    } else if (req.params.id < 0 || req.params.id > movies.length - 1) {
+        res.status(404);
+        res.send({
+            status: 404,
+            error: true,
+            message: `the movie ${req.params.id} does not exist`,
+        });
+    } else {
+        if (req.query.title !== undefined && req.query.title !== "") {
+            movies[req.params.id] = {
+                ...movies[req.params.id],
+                title: req.query.title,
+            };
+        }
+        if (
+            !isNaN(req.query.year) &&
+            req.query.year !== "" &&
+            req.query.year.length == 4
+        ) {
+            movies[req.params.id] = {
+                ...movies[req.params.id],
+                year: parseInt(req.query.year),
+            };
+        }
+        if (
+            !isNaN(req.query.rating) &&
+            req.query.rating !== undefined &&
+            req.query.rating !== ""
+        ) {
+            movies[req.params.id] = {
+                ...movies[req.params.id],
+                rating: parseFloat(req.query.rating),
+            };
+        }
+        res.send(movies);
+    }
 });
 
 app.get("/movies/delete", (req, res) => {
