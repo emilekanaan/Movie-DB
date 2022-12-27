@@ -45,6 +45,35 @@ app.get("/movies/create", (req, res) => {
     res.send(`create`);
 });
 
+app.get("/movies/add", (req, res) => {
+    let newMovie = { title: "", year: null, rating: 4 };
+    newMovie.title = req.query.title;
+    newMovie.year = parseInt(req.query.year);
+    if (
+        req.query.title !== undefined &&
+        req.query.title !== "" &&
+        !isNaN(req.query.year) &&
+        req.query.year !== "" &&
+        req.query.year.length == 4
+    ) {
+        if (req.query.rating == undefined) {
+            movies.push(newMovie);
+            res.send(movies);
+        } else {
+            newMovie.rating = parseFloat(req.query.rating);
+            movies.push(newMovie);
+            res.send(movies);
+        }
+    } else {
+        res.status(403);
+        res.send({
+            status: 403,
+            error: true,
+            message: "you cannot create a movie without providing a title and a year",
+        });
+    }
+});
+
 app.get("/movies/read", (req, res) => {
     res.send({
         status: 200,
