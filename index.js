@@ -41,11 +41,7 @@ const movies = [
     { title: "الإرهاب والكباب‎", year: 1992, rating: 6.2 },
 ];
 
-app.get("/movies/create", (req, res) => {
-    res.send(`create`);
-});
-
-app.get("/movies/add", (req, res) => {
+app.post("/movies/add", (req, res) => {
     let newMovie = { title: "", year: null, rating: 4 };
     newMovie.title = req.query.title;
     newMovie.year = parseInt(req.query.year);
@@ -135,7 +131,7 @@ app.get("/movies/update", (req, res) => {
     res.send(`you have to enter update/< ID >?title=< NEW_TITLE > `);
 });
 
-app.get("/movies/update/:id", (req, res) => {
+app.put("/movies/update/:id", (req, res) => {
     if (isNaN(req.params.id)) {
         res.status(404);
         res.send({
@@ -185,7 +181,7 @@ app.get("/movies/delete", (req, res) => {
     res.send(`you have to enter delete/< ID > `);
 });
 
-app.get("/movies/delete/:id", (req, res) => {
+app.delete("/movies/delete/:id", (req, res) => {
     if (isNaN(req.params.id)) {
         res.status(404);
         res.send({
